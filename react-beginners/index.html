@@ -17,15 +17,53 @@ const root = document.getElementById("root");
 
 
 function App(){
-    const [counter, setCounter] = React.useState(0); 
-    const onClick = () => {
-        setCounter(counter + 1);
+    const [amount, setAmount] = React.useState(0);
+    const [flipped, setFlipped] = React.useState(false);
+    const onChange = (event) =>{
+        setAmount(event.target.value);
+    };
+    const reset = () => setAmount(0); //값을 0으로 돌려준다.
+    const onFlip = () => {
+        reset(); //flip 누를 때마다 값 바뀌지 않게
+        setFlipped((current) => !current);
+        //만약 onFlip을 실행시킬 때 flipped가 true라면 flase를 반환
+        //만약 onFlip을 실행시킬 때 flipped가 false라면 true를 반환
     };
 
+
     return (
-        <div>
-    <h3>Total clicks: {counter}</h3>
-    <button onClick={onClick}>Click me!</button>
+    <div>
+     <h1>Super converter</h1>
+    
+     <div>
+        <label htmlFor="minutes">Minutes</label>
+        <input 
+        value={flipped ? amount*60 : amount}
+        id="minutes" 
+        placeholder="Minutes" 
+        type="number"
+        onChange={onChange}
+        disabled={flipped === true} // flipped가 true가 되었을 때 막힌다.
+        // disabled = {flipped} 로도 쓸 수 있다.
+        />
+        </div>
+
+     <div>
+     <label htmlFor="hours">Hours</label>
+     <input 
+        value={flipped ? amount : Math.round(amount/60)}
+        id="hours" 
+        placeholder="Hours" 
+        type="number"
+        disabled={flipped === false} // flipped가 false가 되었을 때 막힌다.
+        // disabled = {!flipped} 로도 쓸 수 있다.
+        onChange={onChange}
+        />
+        </div>
+    
+    <button onClick={reset}>Reset</button>
+    <button onClick={onFlip}>
+        {flipped ? "Turn back" : "Flip"}</button>
     </div>
     );
 }
